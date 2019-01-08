@@ -1,31 +1,23 @@
-package com.dennis.oconnell.samplejavaapi.seeders;
+package com.dennis.oconnell.samplejavaapi.seeder;
 
+import com.dennis.oconnell.samplejavaapi.TimesheetApplication;
 import com.dennis.oconnell.samplejavaapi.models.Timesheet;
 import com.dennis.oconnell.samplejavaapi.repositories.TimesheetRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.Resource;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.stereotype.Component;
 
-import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
-@ComponentScan(basePackages={"com.dennis.oconnell.samplejavaapi"})
-@EntityScan(basePackages={"com.dennis.oconnell.samplejavaapi"})
-@EnableJpaRepositories(basePackages={"com.dennis.oconnell.samplejavaapi"})
-@SpringBootApplication
-public class TimesheetSeedApplication implements CommandLineRunner {
-
-    private static final Logger log = LoggerFactory.getLogger(TimesheetSeedApplication.class);
+@Component
+public class TimesheetDbSeeder implements InitializingBean {
+    private static final Logger log = LoggerFactory.getLogger(TimesheetApplication.class);
 
     @Value(value = "classpath:input/GM_Backend_Coding_Exercise_-_Sample_Data_Report.csv")
     private Resource timesheetSeedCSV;
@@ -33,14 +25,7 @@ public class TimesheetSeedApplication implements CommandLineRunner {
     @Autowired
     private TimesheetRepository timesheetRepository;
 
-    public static void main(String[] args) throws FileNotFoundException {
-        log.info("SEEDER STARTING");
-        SpringApplication.run(TimesheetSeedApplication.class, args);
-        log.info("SEEDER FINISHED");
-    }
-
-    @Override
-    public void run(String... args) throws Exception {
+    public void Seed() throws Exception {
 
 
         // reset table
@@ -125,4 +110,10 @@ public class TimesheetSeedApplication implements CommandLineRunner {
     private Boolean parseBoolean(String s) {
         return s == "Yes";
     }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        this.Seed();
+    }
 }
+

@@ -2,10 +2,7 @@ package com.dennis.oconnell.samplejavaapi.models;
 
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.*;
 import java.util.Date;
 
 @Entity
@@ -22,38 +19,56 @@ public class Timesheet {
     private Date date;
 
     @Column(name="Client")
+    @NotEmpty
+    @NotBlank
+    @NotNull
     private String client;
 
     @Column(name="Project")
-
+    @NotEmpty
+    @NotNull
     private String project;
 
-    @Column(name="ProjectCode", nullable = false)
+    @Column(name="ProjectCode")
+    @NotNull
+    @NotEmpty
     private String projectCode;
 
-    @Column(name="Task", nullable = false)
+    @Column(name="Task")
+    @NotNull
+    @NotEmpty
     private String task;
 
-    @Column(name="Hours", nullable = false)
+    @Column(name="Hours")
+    @NotNull
+    @PositiveOrZero
     private double hours;
 
-    @Column(name="HoursRounded", nullable = false)
+    @Column(name="HoursRounded")
+    @PositiveOrZero
+    @NotNull
     private double hoursRounded;
 
     @Column(name="Billable")
+    @NotNull
     private Boolean billable;
 
-    @Column(name="Invoiced")
+    @Column(name = "Invoiced")
+    @NotNull
     private Boolean invoiced;
 
     @Column(name="Approved")
+    @NotNull
     private Boolean approved;
 
-    @Column(name="FirstName", nullable = false)
+    @Column(name="FirstName")
     @NotEmpty
+    @NotNull
     private String firstName;
 
-    @Column(name="LastName", nullable = false)
+    @Column(name="LastName")
+    @NotNull
+    @NotEmpty
     private String lastName;
 
     @Column(name="Department")
@@ -62,16 +77,23 @@ public class Timesheet {
     @Column(name="Employee")
     private Boolean employee;
 
-    @Column(name="BillableRate", nullable = false)
+    @Column(name="BillableRate")
+    @PositiveOrZero
+    @NotNull
     private int billableRate;
 
-    @Column(name="CostRate", nullable = false)
+    @Column(name="CostRate")
+    @PositiveOrZero
+    @NotNull
     private int costRate;
 
     @Column(name="CostAmount")
+    @PositiveOrZero
+    @NotNull
     private int costAmount;
 
     @Column(name="Currency")
+    @NotNull
     private String currency;
 
     @Column(name="ExternalReferenceURL")
@@ -81,7 +103,8 @@ public class Timesheet {
 
     }
 
-    public Timesheet(@NotNull @PastOrPresent Date date, @NotEmpty @NotNull String client, @NotEmpty @NotNull String project, @NotEmpty String projectCode, @NotEmpty String task, @Min(value = 0, message = "Hours must be a positive value") double hours, @Min(value = 0, message = "Hours Rounded must be a positive value") double hoursRounded, Boolean billable, Boolean invoiced, Boolean approved, @NotEmpty String firstName, @NotEmpty String lastName, String department, Boolean employee, @Min(value = 0, message = "Billable Rate must be a positive value") int billableRate, @Min(value = 0, message = "Cost Rate must be a positive value") int costRate, @NotNull(message = "Cost amount must be defined") @Min(value = 0, message = "Cost Amount must be a positive value") int costAmount, @NotEmpty @Min(2) @NotNull String currency, String externalReferenceUrl) {
+    // built in constructor guard clauses
+    public Timesheet(@NotNull @PastOrPresent Date date, @NotEmpty @NotBlank @NotNull String client, @NotEmpty @NotNull String project, @NotNull @NotEmpty String projectCode, @NotNull @NotEmpty String task, @NotNull @PositiveOrZero double hours, @PositiveOrZero @NotNull double hoursRounded, @NotNull Boolean billable, @NotNull Boolean invoiced, @NotNull Boolean approved, @NotEmpty @NotNull String firstName, @NotNull @NotEmpty String lastName, String department, Boolean employee, @PositiveOrZero @NotNull int billableRate, @PositiveOrZero @NotNull int costRate, @PositiveOrZero @NotNull int costAmount, @NotNull String currency, String externalReferenceUrl) {
         this.date = date;
         this.client = client;
         this.project = project;
