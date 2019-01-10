@@ -27,6 +27,9 @@ public class TimesheetDbSeeder implements InitializingBean {
 
     public void Seed() throws Exception {
 
+        if(timesheetRepository.count() > 0){
+            return;
+        }
 
         // reset table
         timesheetRepository.deleteAll();

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.ValidationException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,39 +26,44 @@ public class TimesheetController {
     @Autowired
     private TimesheetRepository timesheetRepository;
 
-    @GetMapping(value = "/timesheet")
+    @GetMapping(value = "timesheet")
     public ResponseEntity<Iterable<Timesheet>> getAll() {
         return new ResponseEntity<>(timesheetRepository.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping(value="/timesheet/{id}")
+    @GetMapping(value = "timesheet/count")
+    public ResponseEntity<Long> getCount() {
+        return new ResponseEntity<>(timesheetRepository.count(), HttpStatus.OK);
+    }
+
+    @GetMapping(value="timesheet/{id}")
     public ResponseEntity<Optional<Timesheet>> getById(@PathVariable Long id){
         return new ResponseEntity<>(timesheetRepository.findById(id), HttpStatus.OK);
     }
 
     //public @ResponseBody String
-    @GetMapping(value = "/timesheet/search")
+    @GetMapping(value = "timesheet/search")
     public ResponseEntity<Iterable<Timesheet>> getByClient(@Valid @RequestParam(value="client", required = true) String client) {
-        if(client != "") {
+        if(!client.isEmpty()) {
             return new ResponseEntity<>(timesheetRepository.findByClient(client),HttpStatus.OK);
         } else throw  new ValidationException("Client not specified.");
     }
 
-    @PostMapping(value = "/timesheet")
+    @PostMapping(value = "timesheet")
     public ResponseEntity<Timesheet> create(@Valid @RequestBody Timesheet timesheet) {
-        if(timesheet.getId() != 0){
+        if(timesheet.getId() == 0){
             return new ResponseEntity<>(timesheetRepository.save(timesheet), HttpStatus.OK);
         } else throw new ValidationException("Timesheet can not be created");
     }
 
-    @PutMapping(value = "/timesheet")
+    @PutMapping(value = "timesheet")
     public ResponseEntity<Timesheet> update(@Valid @RequestBody Timesheet timesheet){
-        if(!timesheetRepository.findById(timesheet.getId()).isPresent()){
+        if(timesheetRepository.findById(timesheet.getId()).isPresent()){
             return new ResponseEntity<>(timesheetRepository.save(timesheet), HttpStatus.OK);
         } else throw new ValidationException("Timesheet can not be updated");
     }
 
-    @DeleteMapping("/timesheet/{id}")
+    @DeleteMapping("timesheet/{id}")
     public ResponseEntity<Long> delete(@PathVariable Long id){
         if(this.timesheetRepository.findById(id).isPresent()){
             timesheetRepository.deleteById(id);

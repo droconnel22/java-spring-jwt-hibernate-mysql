@@ -103,6 +103,10 @@ public class Timesheet {
 
     }
 
+    public void setClient(String client) {
+        this.client = client;
+    }
+
     // built in constructor guard clauses
     public Timesheet(@NotNull @PastOrPresent Date date, @NotEmpty @NotBlank @NotNull String client, @NotEmpty @NotNull String project, @NotNull @NotEmpty String projectCode, @NotNull @NotEmpty String task, @NotNull @PositiveOrZero double hours, @PositiveOrZero @NotNull double hoursRounded, @NotNull Boolean billable, @NotNull Boolean invoiced, @NotNull Boolean approved, @NotEmpty @NotNull String firstName, @NotNull @NotEmpty String lastName, String department, Boolean employee, @PositiveOrZero @NotNull int billableRate, @PositiveOrZero @NotNull int costRate, @PositiveOrZero @NotNull int costAmount, @NotNull String currency, String externalReferenceUrl) {
         this.date = date;
